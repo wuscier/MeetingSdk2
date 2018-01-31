@@ -1,0 +1,29 @@
+﻿<controls:MetroWindow x:Class="MeetingSdkTestWpf.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MeetingSdkTestWpf.Views"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:mvvm="http://prismlibrary.com/"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mvvm:ViewModelLocator.AutoWireViewModel="True"
+        cal:Bind.Model="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=Self}}"
+        cal:Message.Attach="[Event Loaded] = [Action Loaded($source)]"
+        mc:Ignorable="d" SizeChanged="ShellView_OnSizeChanged"
+        Title="ShellView" Height="768" Width="1024">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="Main" Content="MainWindow" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10" Width="100"/>
+            <Button x:Name="Test" Content="测试" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10" Width="100"></Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="10">
+            <controls:TransitioningContentControl mvvm:RegionManager.RegionName="ContentRegion" Background="Transparent"></controls:TransitioningContentControl>
+        </Grid>
+    </Grid>
+</controls:MetroWindow>

@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="MeetingSdkTestWpf.Views.TestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MeetingSdkTestWpf.Views"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             cal:Bind.Model="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=Self}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1000"
+             Loaded="TestView_Loaded">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="Imei" Width="120" VerticalAlignment="Center"></TextBox>
+            <Button x:Name="Login" Content="登录" VerticalAlignment="Center"  Margin="5" IsEnabled="{Binding Started}"></Button>
+            <Button x:Name="GetSerialNo" Content="获取设备串号" Margin="5"></Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button x:Name="SetNpsUrl" Content="设置NpsUrl" VerticalAlignment="Center" Width="80"></Button>
+            <Button x:Name="SetRkPath" Content="设置硬编解码库路径" VerticalAlignment="Center" Width="120"></Button>
+            <Button x:Name="BindToken" Content="绑定Token" VerticalAlignment="Center" Width="80"></Button>
+            <Button x:Name="Stop" Content="停止" VerticalAlignment="Center" Width="60" IsEnabled="{Binding Started}"></Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="MeetingId" Width="70" VerticalAlignment="Center" Margin="5"></TextBox>
+                <Button x:Name="CheckMeetExist" Content="检测会议存在" VerticalAlignment="Center" Width="70" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="GetMeetingInfo" Content="获取会议信息" VerticalAlignment="Center" Width="70" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="GetJoinMeetingInfo" Content="获取加入会议信息" VerticalAlignment="Center" Width="100" IsEnabled="{Binding Started}" Margin="5"></Button>
+
+                <Button x:Name="CheckMeetingHasPassword" Content="查询会议是否有密码" VerticalAlignment="Center" Width="105" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="CheckMeetingPasswordValid" Content="检查会议密码是否有效" VerticalAlignment="Center" Width="110" IsEnabled="{Binding Started}" Margin="5"></Button>
+
+                
+                <Button x:Name="GetMeetingPassword" Content="获取会议密码" VerticalAlignment="Center" Width="80" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="ResetMeetingPassword" Content="重置会议密码" VerticalAlignment="Center" Width="80" IsEnabled="{Binding Started}" Margin="5"></Button>
+            </StackPanel>
+            
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="GetMeetingList" Content="获取会议列表" VerticalAlignment="Center" Width="80" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="GetMeetingQos" Content="获取会议Qos" VerticalAlignment="Center" Width="80" IsEnabled="{Binding Started}" Margin="5"></Button>
+                <Button x:Name="GetMeetingInvitationSMS" Content="获取短信分享的分享内容" VerticalAlignment="Center" Width="125" IsEnabled="{Binding Started}" Margin="5"></Button>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <TextBox x:Name="NickName" Text="" VerticalAlignment="Center" Width="100"></TextBox>
+            <Button x:Name="ModifyName" VerticalAlignment="Center" Width="60" Content="修改名称" Margin="10,0"></Button>
+        </StackPanel>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnGetVideoDevices" Width="70" Height="30" Margin="5" Padding="5" Content="获取视频设备"></Button>
+                    <ComboBox x:Name="VideoDevices" Width="180" Margin="5"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="PlayVideoTest" Width="50" Height="30" Margin="5" Content="预览"></Button>
+                    <Button x:Name="StopPlayVideoTest" Width="70" Height="30" Content="停止预览"></Button>
+                    <Button x:Name="PlayVideoTestYUV" Width="80" Height="30" Margin="5" Content="预览(YUV回调)"></Button>
+                    <Button x:Name="StopPlayVideoTestYUV" Width="100" Height="30" Content="停止预览(YUV回调)"></Button>
+                </StackPanel>
+                <WindowsFormsHost Width="200" Height="200">
+                    <forms:PictureBox x:Name="previewVideo" Width="200" Height="200"></forms:PictureBox>
+                </WindowsFormsHost>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnGetAudioInputDevices" Width="65" Height="30" Margin="5" Padding="5" Content="获取麦克风"></Button>
+                    <ComboBox x:Name="AudioInputDevices" Width="200" Margin="5"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="RecordSoundTest" Width="60" Margin="5" Height="30" Content="录音测试"></Button>
+                    <Button x:Name="StopRecordSoundTest" Width="80" Margin="5" Height="30" Content="停止录音测试"></Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnGetAudioOutputDevices" Width="65" Height="30" Margin="5" Padding="5" Content="获取扬声器"></Button>
+                    <ComboBox x:Name="AudioOutputDevices" Width="200" Margin="5"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="PlaySoundTest" Width="60" Margin="5" Height="30" Content="播放测试"></Button>
+                    <Button x:Name="StopPlaySoundTest" Width="80" Margin="5" Height="30" Content="停止播放测试"></Button>
+                </StackPanel>
+
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="StartNetCheck" Width="60" Margin="5" Height="30" Content="网络探测"></Button>
+                    <Button x:Name="StopNetBandDetect" Width="80" Margin="5" Height="30" Content="停止网络探测"></Button>
+                </StackPanel>
+                <TextBox x:Name="NetBandDetectResult" IsReadOnly="True" Height="100" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

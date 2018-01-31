@@ -1,0 +1,250 @@
+﻿<UserControl x:Class="MeetingSdkTestWpf.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MeetingSdkTestWpf.Views"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:meeting="clr-namespace:MeetingSdk.Wpf;assembly=MeetingSdk.Wpf"
+             xmlns:converters="clr-namespace:MeetingSdkTestWpf.Converters"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             cal:Bind.Model="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=Self}}"
+             mc:Ignorable="d" 
+             x:Name="MainViewUserControl"
+             d:DesignHeight="800" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+            <converters:NegateConverter x:Key="NegateConverter"></converters:NegateConverter>
+            <converters:ParticipantConverter x:Key="ParticipantConverter"></converters:ParticipantConverter>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+            <Button x:Name="BtnStart" Height="30" Margin="5" Padding="5" Content="启动"></Button>
+            <Border BorderBrush="Black" BorderThickness="2">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox SelectedValue="{Binding Imei}" Width="120" SelectedIndex="0" ItemsSource="{Binding Imeis}" DisplayMemberPath="Name" SelectedValuePath="Value"></ComboBox>
+                    <Button x:Name="BtnLoginViaImei" Height="30" Margin="5" Padding="5" Content="登陆【设备号】"></Button>
+                </StackPanel>
+            </Border>
+            <Button x:Name="BtnLoginViaNube" Height="30" Margin="5" Padding="5" Content="登陆【视讯号】"></Button>
+
+            <TextBlock x:Name="TextBlockPhoneId" Text="视讯号：" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"></TextBlock>
+            <TextBlock x:Name="TextBlockName" Text="名称：" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnGetVideoDevices" Width="100" Height="30" Margin="5" Padding="5" Content="获取视频设备"></Button>
+                <ComboBox x:Name="VideoDevices" Width="200" Margin="5"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnGetAudioInputDevices" Width="100" Height="30" Margin="5" Padding="5" Content="获取麦克风"></Button>
+                <TextBlock>人像麦克风</TextBlock>
+                <ComboBox x:Name="AudioInputDevices" Width="200" Margin="5"></ComboBox>
+                <TextBlock>数据麦克风</TextBlock>
+                <ComboBox x:Name="AudioInputDevice2s" Width="200" Margin="5"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnGetAudioOutputDevices" Width="100" Height="30" Margin="5" Padding="5" Content="获取扬声器"></Button>
+                <ComboBox x:Name="AudioOutputDevices" Width="200" Margin="5"></ComboBox>
+            </StackPanel>
+            <Button x:Name="BtnSaveDeviceSettings" Grid.Row="4" Margin="5" Height="30" Width="100" HorizontalAlignment="Left" Content="保存设备配置"></Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button x:Name="BtnCreateMeeting" Height="30" Margin="5" Padding="5" Content="创建即时会议"></Button>
+            <Button x:Name="BtnCreateAndInviteMeeting" Height="30" Margin="5" Padding="5" Content="创建即时会议并邀请"></Button>
+            <Button x:Name="BtnCreateDatedMeeting" Height="30" Margin="5" Padding="5" Content="创建预约会议"></Button>
+            <Button x:Name="BtnCreateAndInviteDatedMeeting" Height="30" Margin="5" Padding="5" Content="创建预约会议并邀请"></Button>
+            <TextBlock x:Name="TextBlockMeetingId" VerticalAlignment="Center" Text="创建会议号：" Margin="5"></TextBlock>
+            <Border BorderBrush="Black" BorderThickness="2">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="TBJoinMeetingId" Width="100" Margin="5" VerticalContentAlignment="Center"></TextBox>
+                    <Button x:Name="BtnJoinMeeting" Content="进入会议" Margin="5" Padding="5"></Button>
+                </StackPanel>
+            </Border>
+            <Button x:Name="BtnExitMeeting" Height="30" Margin="5" Padding="5" Content="退出会议"></Button>
+
+            <Button x:Name="BtnStartSpeak" IsEnabled="{Binding IsSpeaking,Converter={StaticResource NegateConverter}}" Height="30" Margin="5" Padding="5" Content="发言"></Button>
+
+            <Button x:Name="BtnStopSpeak" IsEnabled="{Binding IsSpeaking}" Height="30" Margin="5" Padding="5" Content="停止发言"></Button>
+
+            <Button x:Name="BtnPublishVideo" IsEnabled="{Binding IsSpeaking}" Height="30" Margin="5" Padding="5" Content="发布视频"></Button>
+
+            <Button x:Name="BtnUnpublishVideo" IsEnabled="{Binding IsSpeaking}" Height="30" Margin="5" Padding="5" Content="取消发布视频"></Button>
+
+            <Button x:Name="BtnPublishAudio" IsEnabled="{Binding IsSpeaking}" Height="30" Margin="5" Padding="5" Content="发布音频"></Button>
+
+            <Button x:Name="BtnUnpublishAudio" IsEnabled="{Binding IsSpeaking}" Height="30" Margin="5" Padding="5" Content="取消发布音频"></Button>
+
+            <Button x:Name="RaiseHandReq" Height="30" Margin="5" Padding="5" Content="举手"></Button>
+            <Button x:Name="SendAudioSpeakerStatus" Height="30" Margin="5" Padding="5" Content="广播本地扬声器状态"></Button>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button x:Name="ModifyMeetingInviters" Height="30" Margin="5" Padding="5" Content="邀请新的参会人"></Button>
+            <Button x:Name="GetSpeakerList" Height="30" Margin="5" Padding="5" Content="获取发言者列表"></Button>
+            <Button x:Name="GetCurMeetingMode" Height="30" Margin="5" Padding="5" Content="获取当前会议模式(自由，主持人)"></Button>
+            <Button x:Name="GetMeetingLockStatus" Height="30" Margin="5" Padding="5" Content="获取会议锁定状态"></Button>
+            <Button x:Name="GetCurrentSubscribleStreamInfo" Height="30" Margin="5" Padding="5" Content="获取当前用户订阅的所有流信息"></Button>
+            <Button x:Name="GetMicSendList" Height="30" Margin="5" Padding="5" Content="获取传麦人列表"></Button>
+            <Button x:Name="HostChangeMeetingMode" Height="30" Margin="5" Padding="5" Content="更该会议模式"></Button>
+            <Button x:Name="AskForMeetingLock" Height="30" Margin="5" Padding="5" Content="会议加解锁"></Button>
+            <Button x:Name="StartMp4Record" Height="30" Margin="5" Padding="5" Content="开始录制MP4"></Button>
+            <Button x:Name="StopMp4Record" Height="30" Margin="5" Padding="5" Content="停止录制MP4"></Button>
+            <Button x:Name="StartLiveRecord" Height="30" Margin="5" Padding="5" Content="开始直播"></Button>
+            <Button x:Name="StopLiveRecord" Height="30" Margin="5" Padding="5" Content="停止直播"></Button>
+            <Button x:Name="AddDisplayWindow" Height="30" Margin="5" Padding="5" Content="增加渲染窗口"></Button>
+            <Button x:Name="RemoveDisplayWindow" Height="30" Margin="5" Padding="5" Content="移除渲染窗口"></Button>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button x:Name="SetVideoDisplayMode" Height="30" Margin="5" Padding="5" Content="设置视频显示模式"></Button>
+            <Button x:Name="SetAudioMixRecvBufferNum" Height="30" Margin="5" Padding="5" Content="设置音频混音接收端混音器缓冲区参数 (参会前调用)"></Button>
+            <Button x:Name="SetAutoAdjustEnableStatus" Height="30" Margin="5" Padding="5" Content="设置是否启用自适应(参会前调用)"></Button>
+            <Button x:Name="SetPublishDoubleVideoStreamStatus" Height="30" Margin="5" Padding="5" Content="设置是否人像推双流(参会前调用)"></Button>
+            <Button x:Name="SetLowVideoStreamCodecParam" Height="30" Margin="5" Padding="5" Content="设置流畅模式视频流编码参数"></Button>
+            <Button x:Name="SetCurCpuInfo" Height="30" Margin="5" Padding="5" Content="设置cpu利用率"></Button>
+        </StackPanel>
+
+        <Canvas Grid.Row="5">
+
+            <WindowsFormsHost x:Name="VideoBox1"
+                              meeting:MeetingWindow.Attach="VideoBox1"  meeting:MeetingWindow.VideoBoxType="Camera">
+                <forms:PictureBox x:Name="PictureBox1"></forms:PictureBox>
+            </WindowsFormsHost>
+
+            <WindowsFormsHost x:Name="VideoBox2"
+                              meeting:MeetingWindow.Attach="VideoBox2" meeting:MeetingWindow.VideoBoxType="DataCard">
+                <forms:PictureBox x:Name="PictureBox4"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox3"
+                              meeting:MeetingWindow.Attach="VideoBox3" meeting:MeetingWindow.VideoBoxType="WinCapture">
+                <forms:PictureBox x:Name="PictureBox2"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox4"
+                              meeting:MeetingWindow.Attach="VideoBox4">
+                <forms:PictureBox x:Name="PictureBox5"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox5"
+                              meeting:MeetingWindow.Attach="VideoBox5">
+                <forms:PictureBox x:Name="PictureBox3"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox6"
+                              meeting:MeetingWindow.Attach="VideoBox6">
+                <forms:PictureBox x:Name="PictureBox6"></forms:PictureBox>
+            </WindowsFormsHost>
+            
+        </Canvas>
+        
+        <!--<Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <WindowsFormsHost x:Name="VideoBox1" Grid.Row="0" Grid.Column="0"
+                              meeting:MeetingWindow.Attach="VideoBox1" meeting:MeetingWindow.VideoBoxType="Camera">
+                <forms:PictureBox x:Name="PictureBox1"></forms:PictureBox>
+            </WindowsFormsHost>
+
+            <WindowsFormsHost x:Name="VideoBox2" Grid.Row="0" Grid.Column="1"
+                              meeting:MeetingWindow.Attach="VideoBox2" meeting:MeetingWindow.VideoBoxType="DataCard">
+                <forms:PictureBox x:Name="PictureBox4"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox3" Grid.Row="0" Grid.Column="2"
+                              meeting:MeetingWindow.Attach="VideoBox3" meeting:MeetingWindow.VideoBoxType="WinCapture">
+                <forms:PictureBox x:Name="PictureBox2"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox4" Grid.Row="1" Grid.Column="0"
+                              meeting:MeetingWindow.Attach="VideoBox4">
+                <forms:PictureBox x:Name="PictureBox5"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox5" Grid.Row="1" Grid.Column="1"
+                              meeting:MeetingWindow.Attach="VideoBox5">
+                <forms:PictureBox x:Name="PictureBox3"></forms:PictureBox>
+            </WindowsFormsHost>
+            <WindowsFormsHost x:Name="VideoBox6" Grid.Row="1" Grid.Column="2"
+                              meeting:MeetingWindow.Attach="VideoBox6">
+                <forms:PictureBox x:Name="PictureBox6"></forms:PictureBox>
+            </WindowsFormsHost>
+        </Grid>-->
+        
+        <Grid Grid.Row="6">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding Participants}" HorizontalAlignment="Left" Height="100">
+                    <ListBox.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="5"></Setter>
+                            <Setter Property="Height" Value="30"></Setter>
+                        </Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                            <Setter Property="Margin" Value="5"></Setter>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=Account.AccountName}" DataContext="{Binding}"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Right" Text="发言" Visibility="{Binding IsSpeaking, Converter={StaticResource BooleanToVisibilityConverter}}" DataContext="{Binding}"></TextBlock>
+                                    <Button x:Name="BtnSubscribeVideo" Command="{Binding SubscribeVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}" Content="订阅视频" Width="70"></Button>
+                                    <Button x:Name="BtnUnsubscribeVideo" Command="{Binding UnsubscribeVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="取消订阅视频"  Width="85"></Button>
+                                    <Button x:Name="BtnSubscribeAudio"  Command="{Binding SubscribeAudioCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"  Content="订阅音频" Width="70"></Button>
+                                    <Button x:Name="BtnUnsubscribeAudio" Command="{Binding UnsubscribeAudioCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="取消订阅音频" Width="85"></Button>
+                                    <Button x:Name="BtnRequireSpeak"  Command="{Binding RequireSpeakCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"  Content="指定发言" Width="70"></Button>
+                                    <Button x:Name="BtnRequireStopSpeak" Command="{Binding RequireStopSpeakCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="指定停止发言" Width="85"></Button>
+                                    <Button x:Name="BtnGetSpeakerInfo" Command="{Binding GetSpeakerInfoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="获取发言者信息" Width="85"></Button>
+                                    <Button x:Name="BtnGetUserPublishStreamInfo" Command="{Binding GetUserPublishStreamInfoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="获取用户发布流信息" Width="120"></Button>
+                                    <Button x:Name="BtnGetSpeakerVideoStreamParam" Command="{Binding GetSpeakerVideoStreamParamCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="获取参会方视频流分辨率" Width="120"></Button>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="BtnSendUiTransparentMsg" Command="{Binding SendUiTransparentMsgCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="发送透传消息" Width="85"></Button>
+                                    <Button x:Name="BtnAsynMicSendReq" Command="{Binding AsynMicSendReqCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="传麦" Width="50"></Button>
+                                    <Button x:Name="BtnHostKickoutUser" Command="{Binding HostKickoutUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="踢人" Width="50"></Button>
+
+                                    <Button x:Name="HostOrderOneDoOpration1" Command="{Binding HostOrderOneDoOpration1Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="打开摄像头" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration2" Command="{Binding HostOrderOneDoOpration2Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="关闭摄像头" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration3" Command="{Binding HostOrderOneDoOpration3Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="打开麦克风" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration4" Command="{Binding HostOrderOneDoOpration4Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="关闭麦克风" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration5" Command="{Binding HostOrderOneDoOpration5Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="打开屏幕分享" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration6" Command="{Binding HostOrderOneDoOpration6Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="关闭屏幕分享" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration7" Command="{Binding HostOrderOneDoOpration7Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="打开扬声器" Width="85"></Button>
+                                    <Button x:Name="HostOrderOneDoOpration8" Command="{Binding HostOrderOneDoOpration8Command}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="关闭扬声器" Width="85"></Button>
+                                    <Button x:Name="SetVideoClarity" Command="{Binding SetVideoClarityCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem},Converter={StaticResource ParticipantConverter}}"  DataContext="{Binding ElementName=MainViewUserControl,Path=DataContext}"   Content="设置画面清晰度" Width="100"></Button>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            
+        </Grid>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>StandardSdk.NetAgent</id>
+    <version>1.0.6</version>
+    <title>StandardSdk.NetAgent</title>
+    <authors>stjy</authors>
+    <owners>stjy</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>wrap cpp meeting sdk apis using C#.</description>
+    <releaseNotes>modify send UI msg</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>StandardSdk Wrapper C#</tags>
+  </metadata>
+  	  <files>
+	<file src="bin\Debug\MeetingSdk.NetAgent.dll" target="lib\net452"/>
+  </files>
+
+</package>
